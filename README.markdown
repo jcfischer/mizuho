@@ -54,6 +54,10 @@ that also have a different look:
 
     mizuho input.txt --template manualsonrails --multi-page
 
+In order to process the asciidoc book format, pass the -b parameter:
+
+    mizuho book.txt -b
+
 Take a look at the 'templates' directory for available templates.
 
 ## Credits
