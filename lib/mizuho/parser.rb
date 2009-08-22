@@ -47,12 +47,12 @@ class Parser
 	end
 
 private
-	def parse_table_of_contents(html)
+	def parse_table_of_contents(html, book = false)
 		@headings = []
 		current_heading = toplevel_heading = Heading.new
 		current_heading.title = @title
-		current_heading.level = 1
-		offset = 0
+		current_heading.level = 0
+		offset = book ? 1 : 0
 		while true
 			offset = html.index(%r{<h(\d) id="(.*?)">(.*?)</h\d>}, offset)
 			break if offset.nil?

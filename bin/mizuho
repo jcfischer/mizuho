@@ -16,6 +16,9 @@ parser = OptionParser.new do |opts|
 	opts.on("-m", "--multi-page", "Generate one file per chapter.") do |value|
 		options[:multi_page] = value
 	end
+  opts.on("-b", "--book", "Use the book format of AsciiDoc") do |value|
+    options[:book] = value
+  end
 	opts.on("--icons-dir DIR", "Specify the directory in which icons\n" <<
 		"#{' ' * 37}should be searched. Defaults to\n" <<
 		"#{' ' * 37}'images/icons'.") do |value|

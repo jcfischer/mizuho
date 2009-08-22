@@ -19,18 +19,23 @@ class Generator
 		@multi_page = options[:multi_page]
 		@icons_dir = options[:icons_dir]
 		@conf_file = options[:conf_file]
+    @book = options[:book]
 	end
 	
 	def start
 		output_filename = determine_output_filename(@input_file, @output_name)
-		self.class.run_asciidoc(@input_file, output_filename, @icons_dir, @conf_file)
+		self.class.run_asciidoc(@input_file, output_filename, @icons_dir, @conf_file, @book)
 		if @template
 			apply_template(output_filename, @input_file, @output_name, @template, @multi_page)
 		end
 	end
 	
-	def self.run_asciidoc(input, output, icons_dir = nil, conf_file = nil)
+	def self.run_asciidoc(input, output, icons_dir = nil, conf_file = nil, book = false)
 		args = ["python", ASCIIDOC, "-a", "toc", "-a", "icons"]
+    if book
+      args << "-d"
+      args << "book"
+    end
 		if icons_dir
 			args << "-a"
 			args << "iconsdir=#{icons_dir}"
