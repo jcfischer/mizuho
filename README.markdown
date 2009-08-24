@@ -56,7 +56,12 @@ that also have a different look:
 
 In order to process the asciidoc book format, pass the -b parameter:
 
-    mizuho book.txt -b
+    mizuho -b book.txt
+
+If you want to create the docbook xml version, pass the -f docbook parameter. 
+This will NOT create any HTML.
+
+    mizuhe -b -f docbook book.txt
 
 Take a look at the 'templates' directory for available templates.
 

@@ -20,21 +20,28 @@ class Generator
 		@icons_dir = options[:icons_dir]
 		@conf_file = options[:conf_file]
     @book = options[:book]
+    @format = options[:format]
 	end
 	
 	def start
-		output_filename = determine_output_filename(@input_file, @output_name)
-		self.class.run_asciidoc(@input_file, output_filename, @icons_dir, @conf_file, @book)
-		if @template
+		output_filename = determine_output_filename(@input_file, @output_name, nil, @format)
+    puts output_filename
+		self.class.run_asciidoc(@input_file, output_filename, @icons_dir, @conf_file, @book, @format)
+		if @template && @format != "docbook"
 			apply_template(output_filename, @input_file, @output_name, @template, @multi_page)
 		end
 	end
 	
-	def self.run_asciidoc(input, output, icons_dir = nil, conf_file = nil, book = false)
+	def self.run_asciidoc(input, output, icons_dir = nil, conf_file = nil, book = false, format = "xhtml")
 		args = ["python", ASCIIDOC, "-a", "toc", "-a", "icons"]
     if book
       args << "-d"
       args << "book"
+    end
+    if format == "docbook"
+      puts "adding docbook"
+      args << "-b"
+      args << "docbook"
     end
 		if icons_dir
 			args << "-a"
@@ -48,6 +55,7 @@ class Generator
 			end
 		end
 		args += ["-n", "-o", output, input]
+
 		if !system(*args)
 			raise GenerationError, "Asciidoc failed."
 		end
@@ -68,7 +76,8 @@ private
 		end
 	end
 	
-	def determine_output_filename(input, output = nil, chapter_id = nil)
+	def determine_output_filename(input, output = nil, chapter_id = nil, docbook = false)
+    extension = docbook ? "xml" : "html"
 		if chapter_id
 			if output
 				dirname = File.dirname(output)
@@ -78,7 +87,7 @@ private
 			else
 				dirname = File.dirname(input)
 				basename = File.basename(input, File.extname(input))
-				filename = File.join(dirname, "#{basename}-#{chapter_id}.html")
+				filename = File.join(dirname, "#{basename}-#{chapter_id}.#{extension}")
 			end
 		else
 			if output
@@ -86,7 +95,7 @@ private
 			else
 				dirname = File.dirname(input)
 				basename = File.basename(input, File.extname(input))
-				filename = File.join(dirname, "#{basename}.html")
+				filename = File.join(dirname, "#{basename}.#{extension}")
 			end
 		end
 		return File.expand_path(filename)

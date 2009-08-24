@@ -19,6 +19,11 @@ parser = OptionParser.new do |opts|
   opts.on("-b", "--book", "Use the book format of AsciiDoc") do |value|
     options[:book] = value
   end
+  opts.on("-f", "--format FORMAT", String, "Specifiy which format to use\n" <<
+    "#{' ' * 37}either 'xhtml' or 'docbook'\n" <<
+    "#{' ' * 37}defaults to 'xhtml'.") do |value|
+      options[:format] = value
+  end
 	opts.on("--icons-dir DIR", "Specify the directory in which icons\n" <<
 		"#{' ' * 37}should be searched. Defaults to\n" <<
 		"#{' ' * 37}'images/icons'.") do |value|
